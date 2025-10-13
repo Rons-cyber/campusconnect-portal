@@ -24,7 +24,7 @@ h2{color:var(--primary);font-size:1.5rem;margin-bottom:.8rem}
 .chat-box{border:1.5px solid var(--border);border-radius:10px;height:250px;overflow-y:auto;background:var(--secondary);padding:8px;margin-bottom:8px}
 .list-item{border-bottom:1px solid var(--border);padding:8px 0}
 .issue-btns{display:flex;gap:10px;margin-top:6px}
-.resolved{background:#d1f7c4;border-left:5px solid #22c55e}
+.resolved{background:#d1f7c4;border-left:5px solid #22c55e;padding-left:5px}
 footer{position:fixed;bottom:0;left:0;width:100%;text-align:center;padding:10px 0;background:var(--text-light);border-top:2px solid var(--border);font-size:.9rem}
 footer span{color:var(--accent)}footer b{color:var(--primary)}
 </style>
@@ -116,181 +116,160 @@ footer span{color:var(--accent)}footer b{color:var(--primary)}
 </footer>
 
 <script>
-/* --- app state & helpers --- */
+const $ = id => document.getElementById(id);
+
 let currentRole = '';
 let chatMessages = JSON.parse(localStorage.getItem('chatMessages')||'[]');
 let issues = JSON.parse(localStorage.getItem('issues')||'[]');
 
-const $ = id => document.getElementById(id);
+function openMenu(){ $('sidebar').style.width='240px'; }
+function closeMenu(){ $('sidebar').style.width='0'; }
+function showSection(id){ document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden')); $(id).classList.remove('hidden'); closeMenu(); }
 
-function openMenu(){ $('sidebar').style.width = '240px'; }
-function closeMenu(){ $('sidebar').style.width = '0'; }
-function showSection(id){
-  document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
-  $(id).classList.remove('hidden');
-  closeMenu();
-}
+$('role').addEventListener('change', ()=> $('adminPass').classList.toggle('hidden', $('role').value!=='admin'));
 
-/* show/hide admin password field when role selector changes */
-$('role').addEventListener('change', ()=> $('adminPass').classList.toggle('hidden', $('role').value !== 'admin'));
-
-/* --- requireAdmin: prompt for admin password when needed --- */
-function requireAdmin(){
-  // if already admin in storage, we're good
-  if(localStorage.getItem('role') === 'admin'){ currentRole = 'admin'; toggleAdminButtons('admin'); $('logoutBtn').classList.remove('hidden'); return true; }
-  // prompt for password
-  const p = prompt('Admin password required:');
-  if(p === null) return false; // user cancelled
-  if(p === 'admin'){ // correct password (you can change this)
-    localStorage.setItem('role','admin');
-    currentRole = 'admin';
-    toggleAdminButtons('admin');
-    $('logoutBtn').classList.remove('hidden');
-    $('welcomeMsg').innerText = $('name').value ? `Welcome ${$('name').value}! (admin)` : 'Admin';
-    alert('Admin access granted');
-    return true;
-  } else {
-    alert('Incorrect admin password');
-    return false;
-  }
-}
-
-/* --- load saved state --- */
-window.onload = () => {
-  const savedName = localStorage.getItem('name');
-  const savedRole = localStorage.getItem('role');
-  if(savedName){ $('name').value = savedName; $('welcomeMsg').innerText = `Welcome ${savedName}!${savedRole?(' You are logged in as '+savedRole):''}`; }
-  if(savedRole){ currentRole = savedRole; $('logoutBtn').classList.remove('hidden'); toggleAdminButtons(savedRole); }
-  // render persisted lists & data
-  $('facultyList').innerHTML = localStorage.getItem('facultyList')||'';
-  $('alumniList').innerHTML = localStorage.getItem('alumniList')||'';
-  $('tournamentList').innerHTML = localStorage.getItem('tournamentList')||'';
-  renderChat(); renderIssues();
-};
-
-/* --- login/logout --- */
+// Login
 function login(){
   const name = $('name').value.trim();
   const role = $('role').value;
   const pass = $('adminPass').value.trim();
   if(!name) return alert('Please enter your name');
-  if(role==='admin' && pass !== 'admin') return alert('Incorrect admin password!');
+  if(role==='admin' && pass!=='admin') return alert('Incorrect admin password!');
   localStorage.setItem('name', name);
   localStorage.setItem('role', role);
   currentRole = role;
   $('welcomeMsg').innerText = `Welcome ${name}! You are logged in as ${role}.`;
-  if(role === 'admin'){ toggleAdminButtons('admin'); $('logoutBtn').classList.remove('hidden'); }
-  else toggleAdminButtons(''); // hide admin controls
+  toggleAdminButtons(role);
+  $('logoutBtn').classList.remove('hidden');
 }
 
+// Logout
 function logout(){
   if(!confirm('Are you sure you want to logout?')) return;
   localStorage.removeItem('name');
   localStorage.removeItem('role');
-  currentRole = '';
-  $('name').value = '';
-  $('welcomeMsg').innerText = '';
-  $('logoutBtn').classList.add('hidden');
+  currentRole='';
+  $('name').value='';
+  $('welcomeMsg').innerText='';
   toggleAdminButtons('');
+  $('logoutBtn').classList.add('hidden');
   showSection('loginSection');
   alert('Logged out (site data preserved).');
 }
 
-/* --- admin controls visibility --- */
+// Admin controls visibility
 function toggleAdminButtons(role){
   ['addFacultyBtn','addAlumniBtn','addTournamentBtn'].forEach(id => {
-    const el = $(id);
-    if(!el) return;
-    el.classList.toggle('hidden', role !== 'admin');
+    const el=$(id); if(!el) return; el.classList.toggle('hidden', role!=='admin');
   });
 }
 
-/* --- chat --- */
+// Chat
 function sendMessage(){
-  const msg = $('chatInput').value.trim();
+  const msg=$('chatInput').value.trim();
   if(!msg) return;
-  const name = localStorage.getItem('name') || 'Guest';
+  const name=localStorage.getItem('name')||'Guest';
   chatMessages.push({name,msg});
-  localStorage.setItem('chatMessages', JSON.stringify(chatMessages));
-  $('chatInput').value = '';
+  localStorage.setItem('chatMessages',JSON.stringify(chatMessages));
+  $('chatInput').value='';
   renderChat();
 }
 function renderChat(){
-  $('chatBox').innerHTML = chatMessages.map(c=>`<div class="chat-message"><b>${c.name}:</b> ${c.msg}</div>`).join('');
-  $('chatBox').scrollTop = $('chatBox').scrollHeight;
+  $('chatBox').innerHTML=chatMessages.map(c=>`<div class="chat-message"><b>${c.name}:</b> ${c.msg}</div>`).join('');
+  $('chatBox').scrollTop=$('chatBox').scrollHeight;
 }
 
-/* --- issues --- */
+// Issues
 function addIssue(){
-  const text = $('issueText').value.trim();
+  const text=$('issueText').value.trim();
   if(!text) return alert('Please describe your issue!');
-  const name = localStorage.getItem('name') || 'Anonymous';
-  const role = localStorage.getItem('role') || 'Guest';
+  const name=localStorage.getItem('name')||'Anonymous';
+  const role=localStorage.getItem('role')||'Guest';
   issues.push({name,role,text,resolved:false});
-  localStorage.setItem('issues', JSON.stringify(issues));
-  $('issueText').value = '';
+  localStorage.setItem('issues',JSON.stringify(issues));
+  $('issueText').value='';
   renderIssues();
 }
+
 function renderIssues(){
-  const role = localStorage.getItem('role');
-  const list = $('issueList');
-  if(!issues.length){ list.innerHTML = '<p>No issues submitted yet.</p>'; return; }
-  list.innerHTML = issues.map((i,idx)=>`
+  const role=localStorage.getItem('role');
+  const list=$('issueList');
+  if(!issues.length){ 
+    list.innerHTML='<p>No issues submitted yet.</p>'; 
+    return; 
+  }
+  list.innerHTML=issues.map((i,idx)=>`
     <div class="list-item ${i.resolved?'resolved':''}">
       <b>${i.name}</b> <small style="color:gray">(${i.role})</small><br>${i.text}
-      ${role==='admin'?`<div class="issue-btns"><button onclick="markResolved(${idx})">${i.resolved?'Unmark':'Mark Resolved'}</button><button onclick="deleteIssue(${idx})" style="background:#ff4b4b">Delete</button></div>`:''}
+      ${role==='admin'?`
+        <div class="issue-btns">
+          <button onclick="resolveIssue(${idx})">${i.resolved?'Unresolve':'Resolve'}</button>
+          <button onclick="discardIssue(${idx})" style="background:#ff4b4b">Discard</button>
+        </div>`:''}
     </div>`).join('');
 }
-function markResolved(idx){
-  // ensure admin
-  if(localStorage.getItem('role') !== 'admin' && !requireAdmin()) return;
-  issues[idx].resolved = !issues[idx].resolved;
-  localStorage.setItem('issues', JSON.stringify(issues));
+
+function resolveIssue(idx){
+  if(localStorage.getItem('role')!=='admin') return alert('Admin access required');
+  issues[idx].resolved=!issues[idx].resolved;
+  localStorage.setItem('issues',JSON.stringify(issues));
   renderIssues();
 }
-function deleteIssue(idx){
-  if(localStorage.getItem('role') !== 'admin' && !requireAdmin()) return;
-  if(!confirm('Delete this issue?')) return;
+
+function discardIssue(idx){
+  if(localStorage.getItem('role')!=='admin') return alert('Admin access required');
+  if(!confirm('Are you sure you want to discard this issue?')) return;
   issues.splice(idx,1);
-  localStorage.setItem('issues', JSON.stringify(issues));
+  localStorage.setItem('issues',JSON.stringify(issues));
   renderIssues();
 }
 
-/* --- CGPA --- */
-function addSubject(){ const d=document.createElement('div'); d.innerHTML = `<input type="number" placeholder="Credits" class="credit"><input type="number" placeholder="Grade (0-10)" class="grade">`; $('subjects').appendChild(d); }
+// CGPA
+function addSubject(){ const d=document.createElement('div'); d.innerHTML=`<input type="number" placeholder="Credits" class="credit"><input type="number" placeholder="Grade (0-10)" class="grade">`; $('subjects').appendChild(d); }
 function calculateCGPA(){
-  const credits = [...document.querySelectorAll('.credit')].map(x=>+x.value||0);
-  const grades = [...document.querySelectorAll('.grade')].map(x=>+x.value||0);
-  const totalC = credits.reduce((a,b)=>a+b,0);
-  const totalP = credits.map((c,i)=>c*grades[i]).reduce((a,b)=>a+b,0);
-  $('cgpaResult').innerText = `Your CGPA is ${ totalC ? (totalP/totalC).toFixed(2) : 0 }`;
+  const credits=[...document.querySelectorAll('.credit')].map(x=>+x.value||0);
+  const grades=[...document.querySelectorAll('.grade')].map(x=>+x.value||0);
+  const totalC=credits.reduce((a,b)=>a+b,0);
+  const totalP=credits.map((c,i)=>c*grades[i]).reduce((a,b)=>a+b,0);
+  $('cgpaResult').innerText=`Your CGPA is ${totalC?(totalP/totalC).toFixed(2):0}`;
 }
 
-/* --- Admin-add items (require admin password if not admin) --- */
+// Admin add items
 function addFaculty(){
-  if(localStorage.getItem('role') !== 'admin' && !requireAdmin()) return;
-  const name = prompt('Enter Faculty Name:'); if(!name) return;
-  const dept = prompt('Enter Department:'); if(!dept) return;
-  $('facultyList').innerHTML += `<div class="list-item"><b>${escapeHtml(name)}</b> - ${escapeHtml(dept)}</div>`;
-  localStorage.setItem('facultyList', $('facultyList').innerHTML);
+  if(localStorage.getItem('role')!=='admin') return alert('Admin access required');
+  const name=prompt('Enter Faculty Name:'); if(!name) return;
+  const dept=prompt('Enter Department:'); if(!dept) return;
+  $('facultyList').innerHTML+=`<div class="list-item"><b>${escapeHtml(name)}</b> - ${escapeHtml(dept)}</div>`;
+  localStorage.setItem('facultyList',$('facultyList').innerHTML);
 }
 function addAlumni(){
-  if(localStorage.getItem('role') !== 'admin' && !requireAdmin()) return;
-  const name = prompt('Enter Alumni Name:'); if(!name) return;
-  const year = prompt('Enter Graduation Year:'); if(!year) return;
-  $('alumniList').innerHTML += `<div class="list-item"><b>${escapeHtml(name)}</b> - Class of ${escapeHtml(year)}</div>`;
-  localStorage.setItem('alumniList', $('alumniList').innerHTML);
+  if(localStorage.getItem('role')!=='admin') return alert('Admin access required');
+  const name=prompt('Enter Alumni Name:'); if(!name) return;
+  const year=prompt('Enter Graduation Year:'); if(!year) return;
+  $('alumniList').innerHTML+=`<div class="list-item"><b>${escapeHtml(name)}</b> - Class of ${escapeHtml(year)}</div>`;
+  localStorage.setItem('alumniList',$('alumniList').innerHTML);
 }
 function addTournament(){
-  if(localStorage.getItem('role') !== 'admin' && !requireAdmin()) return;
-  const name = prompt('Enter Tournament Name:'); if(!name) return;
-  const date = prompt('Enter Tournament Date:'); if(!date) return;
-  $('tournamentList').innerHTML += `<div class="list-item"><b>${escapeHtml(name)}</b> - ${escapeHtml(date)}</div>`;
-  localStorage.setItem('tournamentList', $('tournamentList').innerHTML);
+  if(localStorage.getItem('role')!=='admin') return alert('Admin access required');
+  const name=prompt('Enter Tournament Name:'); if(!name) return;
+  const date=prompt('Enter Tournament Date:'); if(!date) return;
+  $('tournamentList').innerHTML+=`<div class="list-item"><b>${escapeHtml(name)}</b> - ${escapeHtml(date)}</div>`;
+  localStorage.setItem('tournamentList',$('tournamentList').innerHTML);
 }
 
-/* small helper to avoid accidental HTML injection when saving prompts */
 function escapeHtml(s){ return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;'); }
+
+// Load saved state
+window.onload=()=>{
+  const savedName=localStorage.getItem('name');
+  const savedRole=localStorage.getItem('role');
+  if(savedName){ $('name').value=savedName; $('welcomeMsg').innerText=`Welcome ${savedName}!${savedRole?(' You are logged in as '+savedRole):''}`; }
+  if(savedRole){ currentRole=savedRole; $('logoutBtn').classList.remove('hidden'); toggleAdminButtons(savedRole); }
+  $('facultyList').innerHTML=localStorage.getItem('facultyList')||'';
+  $('alumniList').innerHTML=localStorage.getItem('alumniList')||'';
+  $('tournamentList').innerHTML=localStorage.getItem('tournamentList')||'';
+  renderChat(); renderIssues();
+};
 </script>
 </body>
 </html>
