@@ -275,98 +275,145 @@ footer b { color: var(--primary); }
   <b>Aryan</b>, <b>Navdeep</b> & <b>Kritika</b> <span>♥</span>
 </footer>
 
-<script>
-let currentRole = '';
-let chatMessages = [];
-let issues = [];
+<script type="module">
+  // ====== FIREBASE SETUP ======
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import { getDatabase, ref, push, onValue, set } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
 
-function openMenu() { document.getElementById("sidebar").style.width = "240px"; }
-function closeMenu() { document.getElementById("sidebar").style.width = "0"; }
-function showSection(id) {
-  document.querySelectorAll('main section').forEach(sec => sec.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
-  closeMenu();
-}
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
 
-// Login
-function login() {
-  const name = document.getElementById('name').value.trim();
-  const role = document.getElementById('role').value;
-  if (!name) return alert('Please enter your name');
-  currentRole = role;
-  document.getElementById('welcomeMsg').innerText = `Welcome ${name}! You are logged in as ${role}.`;
-  
-  // Show admin-only buttons
-  ['addFacultyBtn','addAlumniBtn','addTournamentBtn'].forEach(id => {
-    document.getElementById(id).classList.toggle('hidden', role !== 'admin');
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // ====== EXISTING JS LOGIC ======
+  let currentRole = '';
+
+  function openMenu() { document.getElementById("sidebar").style.width = "240px"; }
+  function closeMenu() { document.getElementById("sidebar").style.width = "0"; }
+  function showSection(id) {
+    document.querySelectorAll('main section').forEach(sec => sec.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+    closeMenu();
+  }
+
+  // LOGIN
+  function login() {
+    const name = document.getElementById('name').value.trim();
+    const role = document.getElementById('role').value;
+    if (!name) return alert('Please enter your name');
+    currentRole = role;
+    document.getElementById('welcomeMsg').innerText = `Welcome ${name}! You are logged in as ${role}.`;
+    ['addFacultyBtn','addAlumniBtn','addTournamentBtn'].forEach(id => {
+      document.getElementById(id).classList.toggle('hidden', role !== 'admin');
+    });
+  }
+
+  // ====== CHAT (REAL-TIME) ======
+  const chatRef = ref(db, "chat");
+  function sendMessage() {
+    const msg = document.getElementById('chatInput').value.trim();
+    const name = document.getElementById('name').value || 'Guest';
+    if (!msg) return;
+    push(chatRef, { name, msg, time: Date.now() });
+    document.getElementById('chatInput').value = '';
+  }
+  onValue(chatRef, snapshot => {
+    const data = snapshot.val();
+    const box = document.getElementById('chatBox');
+    box.innerHTML = data ? Object.values(data)
+      .map(c => `<div class="chat-message"><b>${c.name}:</b> ${c.msg}</div>`).join('') : '';
+    box.scrollTop = box.scrollHeight;
   });
-}
 
-// Chat
-function sendMessage() {
-  const msg = document.getElementById('chatInput').value.trim();
-  if (!msg) return;
-  const name = document.getElementById('name').value || 'Guest';
-  chatMessages.push({name, msg});
-  document.getElementById('chatInput').value = '';
-  renderChat();
-}
-function renderChat() {
-  const box = document.getElementById('chatBox');
-  box.innerHTML = chatMessages.map(c => `<div class="chat-message"><b>${c.name}:</b> ${c.msg}</div>`).join('');
-  box.scrollTop = box.scrollHeight;
-}
+  // ====== ISSUES (REAL-TIME) ======
+  const issueRef = ref(db, "issues");
+  function addIssue() {
+    const issue = document.getElementById('issueText').value.trim();
+    if (!issue) return;
+    push(issueRef, { issue, time: Date.now() });
+    document.getElementById('issueText').value = '';
+  }
+  onValue(issueRef, snapshot => {
+    const data = snapshot.val();
+    document.getElementById('issueList').innerHTML = data ?
+      Object.values(data).map(i => `<div class="list-item">${i.issue}</div>`).join('') : '';
+  });
 
-// Issues
-function addIssue() {
-  const issue = document.getElementById('issueText').value.trim();
-  if (!issue) return;
-  issues.push(issue);
-  document.getElementById('issueText').value = '';
-  renderIssues();
-}
-function renderIssues() {
-  document.getElementById('issueList').innerHTML = issues.map(i => `<div class="list-item">${i}</div>`).join('');
-}
+  // ====== CGPA CALCULATOR (LOCAL) ======
+  function addSubject() {
+    const div = document.createElement('div');
+    div.innerHTML = `
+      <input type="number" placeholder="Credits" class="credit">
+      <input type="number" placeholder="Grade (0-10)" class="grade">
+    `;
+    document.getElementById('subjects').appendChild(div);
+  }
+  function calculateCGPA() {
+    const credits = [...document.querySelectorAll('.credit')].map(i => parseFloat(i.value)||0);
+    const grades = [...document.querySelectorAll('.grade')].map(i => parseFloat(i.value)||0);
+    const totalCredits = credits.reduce((a,b)=>a+b,0);
+    const totalPoints = credits.map((c,i)=>c*grades[i]).reduce((a,b)=>a+b,0);
+    const cgpa = totalCredits ? (totalPoints/totalCredits).toFixed(2) : 0;
+    document.getElementById('cgpaResult').innerText = `Your CGPA is ${cgpa}`;
+  }
 
-// CGPA
-let subjects = [];
-function addSubject() {
-  const div = document.createElement('div');
-  div.innerHTML = `
-    <input type="number" placeholder="Credits" class="credit">
-    <input type="number" placeholder="Grade (0-10)" class="grade">
-  `;
-  document.getElementById('subjects').appendChild(div);
-}
-function calculateCGPA() {
-  const credits = [...document.querySelectorAll('.credit')].map(i => parseFloat(i.value)||0);
-  const grades = [...document.querySelectorAll('.grade')].map(i => parseFloat(i.value)||0);
-  const totalCredits = credits.reduce((a,b)=>a+b,0);
-  const totalPoints = credits.map((c,i)=>c*grades[i]).reduce((a,b)=>a+b,0);
-  const cgpa = totalCredits ? (totalPoints/totalCredits).toFixed(2) : 0;
-  document.getElementById('cgpaResult').innerText = `Your CGPA is ${cgpa}`;
-}
+  // ====== ADMIN DATA (REAL-TIME) ======
+  const facultyRef = ref(db, "faculty");
+  const alumniRef = ref(db, "alumni");
+  const tourRef = ref(db, "tournaments");
 
-// Admin-only additions
-function addFaculty() {
-  const name = prompt("Enter Faculty Name:");
-  const dept = prompt("Enter Department:");
-  if (name && dept)
-    document.getElementById("facultyList").innerHTML += `<div class='list-item'><b>${name}</b> - ${dept}</div>`;
-}
-function addAlumni() {
-  const name = prompt("Enter Alumni Name:");
-  const year = prompt("Enter Graduation Year:");
-  if (name && year)
-    document.getElementById("alumniList").innerHTML += `<div class='list-item'><b>${name}</b> - Class of ${year}</div>`;
-}
-function addTournament() {
-  const name = prompt("Enter Tournament Name:");
-  const date = prompt("Enter Tournament Date:");
-  if (name && date)
-    document.getElementById("tournamentList").innerHTML += `<div class='list-item'><b>${name}</b> - ${date}</div>`;
-}
+  function addFaculty() {
+    const name = prompt("Enter Faculty Name:");
+    const dept = prompt("Enter Department:");
+    if (name && dept) push(facultyRef, { name, dept });
+  }
+  function addAlumni() {
+    const name = prompt("Enter Alumni Name:");
+    const year = prompt("Enter Graduation Year:");
+    if (name && year) push(alumniRef, { name, year });
+  }
+  function addTournament() {
+    const name = prompt("Enter Tournament Name:");
+    const date = prompt("Enter Tournament Date:");
+    if (name && date) push(tourRef, { name, date });
+  }
+
+  onValue(facultyRef, s => {
+    const d = s.val();
+    document.getElementById("facultyList").innerHTML = d ?
+      Object.values(d).map(f => `<div class='list-item'><b>${f.name}</b> - ${f.dept}</div>`).join('') : '';
+  });
+  onValue(alumniRef, s => {
+    const d = s.val();
+    document.getElementById("alumniList").innerHTML = d ?
+      Object.values(d).map(a => `<div class='list-item'><b>${a.name}</b> - Class of ${a.year}</div>`).join('') : '';
+  });
+  onValue(tourRef, s => {
+    const d = s.val();
+    document.getElementById("tournamentList").innerHTML = d ?
+      Object.values(d).map(t => `<div class='list-item'><b>${t.name}</b> - ${t.date}</div>`).join('') : '';
+  });
+
+  // Attach functions globally
+  window.login = login;
+  window.showSection = showSection;
+  window.openMenu = openMenu;
+  window.closeMenu = closeMenu;
+  window.sendMessage = sendMessage;
+  window.addIssue = addIssue;
+  window.addSubject = addSubject;
+  window.calculateCGPA = calculateCGPA;
+  window.addFaculty = addFaculty;
+  window.addAlumni = addAlumni;
+  window.addTournament = addTournament;
 </script>
 </body>
 </html>
