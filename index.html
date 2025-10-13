@@ -1,0 +1,388 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.1">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px '.SF NS'; color: #0e0e0e}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px '.SF NS'; color: #0e0e0e; min-height: 17.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1">&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1">&lt;title&gt;CampusConnect Portal&lt;/title&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;style&gt;</p>
+<p class="p1">:root {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* 🎨 Purple Theme Palette */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--primary: #6A0DAD; <span class="Apple-converted-space">              </span>/* Deep Purple */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--secondary: #CBA6F7; <span class="Apple-converted-space">            </span>/* Light Lavender */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--accent: #B266FF;<span class="Apple-converted-space">                </span>/* Vibrant Violet */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--bg: #F3E8FF;<span class="Apple-converted-space">                    </span>/* Light Background */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--text-dark: #2E0249; <span class="Apple-converted-space">            </span>/* Deep Purple-Black */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--text-light: #F8F4FF;<span class="Apple-converted-space">            </span>/* Light Text */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--gradient: linear-gradient(135deg, #6A0DAD, #B266FF);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--border: #E2CFF9;<span class="Apple-converted-space">                </span>/* Soft Border */</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* General */</p>
+<p class="p1">* { box-sizing: border-box; margin: 0; padding: 0; }</p>
+<p class="p1">body {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Segoe UI', Roboto, system-ui, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: var(--bg);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: var(--text-dark);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition: margin-left 0.3s ease;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding-bottom: 70px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* Header */</p>
+<p class="p1">header {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: var(--gradient);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: var(--text-light);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 2.5rem 1rem 2rem;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-bottom-left-radius: 30px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-bottom-right-radius: 30px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>box-shadow: 0 4px 12px rgba(106, 13, 173, 0.25);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>position: relative;</p>
+<p class="p1">}</p>
+<p class="p1">header h1 { margin: 0; font-size: 2.3rem; letter-spacing: 1px; }</p>
+<p class="p1">header p { margin-top: .5rem; font-size: 1rem; opacity: .9; }</p>
+<p class="p2"><br></p>
+<p class="p1">/* Menu Button */</p>
+<p class="p1">.menu-btn {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>top: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>left: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: white;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: var(--primary);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>width: 38px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>height: 38px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 1.3rem;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight: bold;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>box-shadow: 0 3px 10px rgba(0,0,0,0.15);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition: 0.2s;</p>
+<p class="p1">}</p>
+<p class="p1">.menu-btn:hover {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: var(--accent);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: var(--text-light);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transform: scale(1.05);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* Sidebar */</p>
+<p class="p1">.sidebar {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>height: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>width: 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>position: fixed;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>z-index: 10;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>top: 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>left: 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: var(--text-light);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-right: 2px solid var(--border);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>overflow-x: hidden;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition: 0.3s;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding-top: 80px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>box-shadow: 3px 0 10px rgba(0,0,0,0.1);</p>
+<p class="p1">}</p>
+<p class="p1">.sidebar button {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display: block;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: none;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: var(--primary);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 15px 25px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>text-align: left;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 1rem;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition: 0.2s;</p>
+<p class="p1">}</p>
+<p class="p1">.sidebar button:hover {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: var(--gradient);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: var(--text-light);</p>
+<p class="p1">}</p>
+<p class="p1">.close-btn {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>top: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>right: 25px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: none;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 1.8rem;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: var(--primary);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>cursor: pointer;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* Main */</p>
+<p class="p1">main { max-width: 950px; margin: auto; padding: 1rem; }</p>
+<p class="p1">.card {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: white;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 1.3rem;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 1.3rem;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>box-shadow: 0 3px 10px rgba(178, 102, 255, 0.15);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border: 1px solid var(--border);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition: all 0.2s;</p>
+<p class="p1">}</p>
+<p class="p1">.card:hover {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transform: translateY(-2px);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>box-shadow: 0 5px 15px rgba(106, 13, 173, 0.2);</p>
+<p class="p1">}</p>
+<p class="p1">input, select, textarea, button {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>width: 100%; margin-top: 6px; padding: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 10px; border: 1.5px solid var(--border);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 1rem;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: var(--text-dark);</p>
+<p class="p1">}</p>
+<p class="p1">input:focus, select:focus, textarea:focus {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-color: var(--accent);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>outline: none;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>box-shadow: 0 0 4px rgba(178, 102, 255, 0.3);</p>
+<p class="p1">}</p>
+<p class="p1">button {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: var(--primary);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: var(--text-light);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-top: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition: background 0.2s;</p>
+<p class="p1">}</p>
+<p class="p1">button:hover { background: var(--accent); }</p>
+<p class="p2"><br></p>
+<p class="p1">.hidden { display: none; }</p>
+<p class="p1">h2 {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: var(--primary);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 1.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: .8rem;</p>
+<p class="p1">}</p>
+<p class="p1">.list-item {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-bottom: 1px solid var(--border);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 8px 0;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* Chat */</p>
+<p class="p1">.chat-box {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border: 1.5px solid var(--border);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>height: 250px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>overflow-y: auto;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: var(--secondary);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 8px;</p>
+<p class="p1">}</p>
+<p class="p1">.chat-message { margin-bottom: 6px; }</p>
+<p class="p2"><br></p>
+<p class="p1">/* Footer */</p>
+<p class="p1">footer {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>position: fixed;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>bottom: 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>left: 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 10px 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: var(--text-light);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-top: 2px solid var(--border);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: .9rem;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>opacity: .9;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>box-shadow: 0 -2px 6px rgba(0,0,0,0.05);</p>
+<p class="p1">}</p>
+<p class="p1">footer span { color: var(--accent); }</p>
+<p class="p1">footer b { color: var(--primary); }</p>
+<p class="p1">&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1">&lt;header&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button class="menu-btn" onclick="openMenu()"&gt;☰&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;h1&gt;CampusConnect Portal&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;p&gt;Empowering Students, Alumni &amp; Industry&lt;/p&gt;</p>
+<p class="p1">&lt;/header&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div id="sidebar" class="sidebar"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button class="close-btn" onclick="closeMenu()"&gt;×&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button onclick="showSection('loginSection')"&gt;Login&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button onclick="showSection('chatSection')"&gt;Chat Room&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button onclick="showSection('issueSection')"&gt;Issues&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button onclick="showSection('cgpaSection')"&gt;CGPA Calculator&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button onclick="showSection('facultySection')"&gt;Faculty&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button onclick="showSection('alumniSection')"&gt;Alumni&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button onclick="showSection('tournamentSection')"&gt;Tournaments&lt;/button&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;main&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Login --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;section id="loginSection" class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Login / Register&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;input type="text" id="name" placeholder="Enter your name"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;select id="role"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;option value="student"&gt;Student&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;option value="alumni"&gt;Alumni&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;option value="faculty"&gt;Faculty&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;option value="admin"&gt;Admin&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button onclick="login()"&gt;Continue&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p id="welcomeMsg"&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Chat Room --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;section id="chatSection" class="card hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Chat Room&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="chatBox" class="chat-box"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;input type="text" id="chatInput" placeholder="Type your message..."&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button onclick="sendMessage()"&gt;Send&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Issues --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;section id="issueSection" class="card hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Report an Issue&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;textarea id="issueText" placeholder="Describe your issue..."&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button onclick="addIssue()"&gt;Submit Issue&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h3 style="margin-top:1rem;"&gt;Submitted Issues&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="issueList"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- CGPA Calculator --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;section id="cgpaSection" class="card hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;CGPA Calculator&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="subjects"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button onclick="addSubject()"&gt;+ Add Subject&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button onclick="calculateCGPA()"&gt;Calculate CGPA&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p id="cgpaResult"&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Faculty --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;section id="facultySection" class="card hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Faculty Directory&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="facultyList"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button id="addFacultyBtn" class="hidden" onclick="addFaculty()"&gt;+ Add Faculty&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Alumni --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;section id="alumniSection" class="card hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Alumni Directory&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="alumniList"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button id="addAlumniBtn" class="hidden" onclick="addAlumni()"&gt;+ Add Alumni&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Tournaments --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;section id="tournamentSection" class="card hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Tournaments&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="tournamentList"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button id="addTournamentBtn" class="hidden" onclick="addTournament()"&gt;+ Add Tournament&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/section&gt;</p>
+<p class="p1">&lt;/main&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;footer&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>© 2025 CampusConnect | Designed with &lt;span&gt;💜&lt;/span&gt; by<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;b&gt;Aryan&lt;/b&gt;, &lt;b&gt;Navdeep&lt;/b&gt; &amp; &lt;b&gt;Kritika&lt;/b&gt; &lt;span&gt;♥&lt;/span&gt;</p>
+<p class="p1">&lt;/footer&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1">let currentRole = '';</p>
+<p class="p1">let chatMessages = [];</p>
+<p class="p1">let issues = [];</p>
+<p class="p2"><br></p>
+<p class="p1">function openMenu() { document.getElementById("sidebar").style.width = "240px"; }</p>
+<p class="p1">function closeMenu() { document.getElementById("sidebar").style.width = "0"; }</p>
+<p class="p1">function showSection(id) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.querySelectorAll('main section').forEach(sec =&gt; sec.classList.add('hidden'));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById(id).classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>closeMenu();</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">// Login</p>
+<p class="p1">function login() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const name = document.getElementById('name').value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const role = document.getElementById('role').value;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (!name) return alert('Please enter your name');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>currentRole = role;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('welcomeMsg').innerText = `Welcome ${name}! You are logged in as ${role}.`;</p>
+<p class="p2"><span class="Apple-converted-space">  </span></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Show admin-only buttons</p>
+<p class="p1"><span class="Apple-converted-space">  </span>['addFacultyBtn','addAlumniBtn','addTournamentBtn'].forEach(id =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById(id).classList.toggle('hidden', role !== 'admin');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">// Chat</p>
+<p class="p1">function sendMessage() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const msg = document.getElementById('chatInput').value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (!msg) return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const name = document.getElementById('name').value || 'Guest';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>chatMessages.push({name, msg});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('chatInput').value = '';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>renderChat();</p>
+<p class="p1">}</p>
+<p class="p1">function renderChat() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const box = document.getElementById('chatBox');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>box.innerHTML = chatMessages.map(c =&gt; `&lt;div class="chat-message"&gt;&lt;b&gt;${c.name}:&lt;/b&gt; ${c.msg}&lt;/div&gt;`).join('');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>box.scrollTop = box.scrollHeight;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">// Issues</p>
+<p class="p1">function addIssue() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const issue = document.getElementById('issueText').value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (!issue) return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>issues.push(issue);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('issueText').value = '';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>renderIssues();</p>
+<p class="p1">}</p>
+<p class="p1">function renderIssues() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('issueList').innerHTML = issues.map(i =&gt; `&lt;div class="list-item"&gt;${i}&lt;/div&gt;`).join('');</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">// CGPA</p>
+<p class="p1">let subjects = [];</p>
+<p class="p1">function addSubject() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const div = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>div.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;input type="number" placeholder="Credits" class="credit"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;input type="number" placeholder="Grade (0-10)" class="grade"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('subjects').appendChild(div);</p>
+<p class="p1">}</p>
+<p class="p1">function calculateCGPA() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const credits = [...document.querySelectorAll('.credit')].map(i =&gt; parseFloat(i.value)||0);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const grades = [...document.querySelectorAll('.grade')].map(i =&gt; parseFloat(i.value)||0);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const totalCredits = credits.reduce((a,b)=&gt;a+b,0);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const totalPoints = credits.map((c,i)=&gt;c*grades[i]).reduce((a,b)=&gt;a+b,0);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const cgpa = totalCredits ? (totalPoints/totalCredits).toFixed(2) : 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('cgpaResult').innerText = `Your CGPA is ${cgpa}`;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">// Admin-only additions</p>
+<p class="p1">function addFaculty() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const name = prompt("Enter Faculty Name:");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const dept = prompt("Enter Department:");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (name &amp;&amp; dept)</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById("facultyList").innerHTML += `&lt;div class='list-item'&gt;&lt;b&gt;${name}&lt;/b&gt; - ${dept}&lt;/div&gt;`;</p>
+<p class="p1">}</p>
+<p class="p1">function addAlumni() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const name = prompt("Enter Alumni Name:");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const year = prompt("Enter Graduation Year:");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (name &amp;&amp; year)</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById("alumniList").innerHTML += `&lt;div class='list-item'&gt;&lt;b&gt;${name}&lt;/b&gt; - Class of ${year}&lt;/div&gt;`;</p>
+<p class="p1">}</p>
+<p class="p1">function addTournament() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const name = prompt("Enter Tournament Name:");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const date = prompt("Enter Tournament Date:");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (name &amp;&amp; date)</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById("tournamentList").innerHTML += `&lt;div class='list-item'&gt;&lt;b&gt;${name}&lt;/b&gt; - ${date}&lt;/div&gt;`;</p>
+<p class="p1">}</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
