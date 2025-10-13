@@ -1,3 +1,165 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CampusConnect</title>
+<style>
+:root {
+  --primary:#7c3aed;
+  --bg:#f5f3ff;
+  --card:#fff;
+  --text:#1e1b4b;
+  --border:#ddd6fe;
+}
+body {
+  font-family: 'Segoe UI', system-ui;
+  margin: 0; background: var(--bg); color: var(--text);
+}
+header {
+  background: var(--primary);
+  color: white; padding: 15px;
+  text-align: center; font-size: 1.5em;
+  position: sticky; top: 0;
+}
+#sidebar {
+  height:100%; width:0; position:fixed; z-index:1; top:0; left:0;
+  background-color:#4c1d95; overflow-x:hidden; transition:0.3s; padding-top:60px;
+}
+#sidebar a {
+  padding:10px 20px; text-decoration:none; color:white; display:block;
+}
+#sidebar a:hover { background:#6d28d9; }
+main { padding:20px; transition:margin-left 0.3s; }
+button {
+  background:var(--primary); border:none; color:white; padding:8px 12px;
+  border-radius:8px; cursor:pointer;
+}
+button:hover { opacity:0.9; }
+.hidden { display:none; }
+.card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:16px; margin-bottom:20px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.05);
+}
+.list-item { background:var(--card); padding:10px; border:1px solid var(--border);
+  border-radius:8px; margin-top:8px;
+}
+textarea, input, select {
+  width:100%; padding:8px; border:1px solid var(--border);
+  border-radius:8px; margin-top:6px;
+}
+.chat-box {
+  border:1px solid var(--border); padding:10px; height:200px;
+  overflow-y:auto; background:white; border-radius:8px;
+}
+.chat-message { padding:5px 0; border-bottom:1px solid #f3e8ff; }
+.admin-controls button { margin-right:6px; margin-top:5px; }
+</style>
+</head>
+<body>
+
+<header>
+  <span style="cursor:pointer;float:left;margin-left:10px;" onclick="openMenu()">☰</span>
+  CampusConnect Portal
+</header>
+
+<div id="sidebar">
+  <a href="javascript:void(0)" onclick="closeMenu()">✖ Close</a>
+  <a href="#" onclick="showSection('home')">🏠 Home</a>
+  <a href="#" onclick="showSection('issues')">📢 Issues</a>
+  <a href="#" onclick="showSection('chat')">💬 Chat</a>
+  <a href="#" onclick="showSection('faculty')">👩‍🏫 Faculty</a>
+  <a href="#" onclick="showSection('alumni')">🎓 Alumni</a>
+  <a href="#" onclick="showSection('tournaments')">🏆 Tournaments</a>
+  <a href="#" onclick="showSection('cgpa')">📈 CGPA Calculator</a>
+</div>
+
+<main id="mainContent">
+
+  <!-- Home -->
+  <section id="home">
+    <div class="card">
+      <h2>Login</h2>
+      <input type="text" id="name" placeholder="Enter your name">
+      <select id="role">
+        <option value="student">Student</option>
+        <option value="alumni">Alumni</option>
+        <option value="faculty">Faculty</option>
+        <option value="admin">Admin</option>
+      </select>
+      <br><br>
+      <button onclick="login()">Login</button>
+      <p id="welcomeMsg"></p>
+    </div>
+  </section>
+
+  <!-- Issues -->
+  <section id="issues" class="hidden">
+    <div class="card">
+      <h2>Report an Issue</h2>
+      <textarea id="issueText" placeholder="Describe the issue..."></textarea><br>
+      <button onclick="addIssue()">Submit</button>
+    </div>
+    <div class="card">
+      <h2>Submitted Issues</h2>
+      <div id="issueList"></div>
+    </div>
+  </section>
+
+  <!-- Chat -->
+  <section id="chat" class="hidden">
+    <div class="card">
+      <h2>General Chat</h2>
+      <div class="chat-box" id="chatBox"></div>
+      <input type="text" id="chatInput" placeholder="Type a message...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </section>
+
+  <!-- Faculty -->
+  <section id="faculty" class="hidden">
+    <div class="card">
+      <h2>Faculty Members</h2>
+      <div id="facultyList"></div>
+      <button id="addFacultyBtn" class="hidden" onclick="addFaculty()">Add Faculty</button>
+    </div>
+  </section>
+
+  <!-- Alumni -->
+  <section id="alumni" class="hidden">
+    <div class="card">
+      <h2>Alumni Network</h2>
+      <div id="alumniList"></div>
+      <button id="addAlumniBtn" class="hidden" onclick="addAlumni()">Add Alumni</button>
+    </div>
+  </section>
+
+  <!-- Tournaments -->
+  <section id="tournaments" class="hidden">
+    <div class="card">
+      <h2>Tournaments</h2>
+      <div id="tournamentList"></div>
+      <button id="addTournamentBtn" class="hidden" onclick="addTournament()">Add Tournament</button>
+    </div>
+  </section>
+
+  <!-- CGPA Calculator -->
+  <section id="cgpa" class="hidden">
+    <div class="card">
+      <h2>CGPA Calculator</h2>
+      <div id="subjects">
+        <input type="number" placeholder="Credits" class="credit">
+        <input type="number" placeholder="Grade (0-10)" class="grade">
+      </div><br>
+      <button onclick="addSubject()">Add Subject</button>
+      <button onclick="calculateCGPA()">Calculate</button>
+      <p id="cgpaResult"></p>
+    </div>
+  </section>
+
+</main>
+
 <script>
 let currentRole = '';
 let chatMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
@@ -36,14 +198,11 @@ function login() {
   if (!name) return alert('Please enter your name');
   currentRole = role;
   document.getElementById('welcomeMsg').innerText = `Welcome ${name}! You are logged in as ${role}.`;
-
   localStorage.setItem('name', name);
   localStorage.setItem('role', role);
-
   toggleAdminButtons(role);
   renderIssues();
 }
-
 function toggleAdminButtons(role) {
   ['addFacultyBtn','addAlumniBtn','addTournamentBtn'].forEach(id => {
     document.getElementById(id).classList.toggle('hidden', role !== 'admin');
@@ -78,23 +237,20 @@ function addIssue() {
   document.getElementById('issueText').value = '';
   renderIssues();
 }
-
 function renderIssues() {
   const issueList = document.getElementById('issueList');
   if (!issues.length) {
     issueList.innerHTML = `<p>No issues submitted yet.</p>`;
     return;
   }
-  
   issueList.innerHTML = issues.map((i, idx) => {
     const resolvedClass = i.resolved ? "background:#e5e7eb; color:#6b7280; text-decoration:line-through;" : "";
     const adminControls = currentRole === 'admin'
-      ? `<div style="margin-top:5px;">
-           <button onclick="resolveIssue(${idx})" style="background:#22c55e;color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;">✅ Resolve</button>
-           <button onclick="deleteIssue(${idx})" style="background:#ef4444;color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;">🗑 Delete</button>
+      ? `<div class="admin-controls">
+           <button onclick="resolveIssue(${idx})">✅ Resolve</button>
+           <button onclick="deleteIssue(${idx})" style="background:#ef4444;">🗑 Delete</button>
          </div>` 
       : "";
-    
     return `<div class="list-item" style="${resolvedClass}">
               <b>${i.name}</b> <small style="color:gray;">(${i.role})</small><br>
               ${i.text}
@@ -103,14 +259,12 @@ function renderIssues() {
             </div>`;
   }).join('');
 }
-
 function resolveIssue(index) {
   if (!confirm("Mark this issue as resolved?")) return;
   issues[index].resolved = true;
   localStorage.setItem('issues', JSON.stringify(issues));
   renderIssues();
 }
-
 function deleteIssue(index) {
   if (!confirm("Are you sure you want to delete this issue?")) return;
   issues.splice(index, 1);
@@ -136,7 +290,7 @@ function calculateCGPA() {
   document.getElementById('cgpaResult').innerText = `Your CGPA is ${cgpa}`;
 }
 
-// Admin-only additions (with storage)
+// Admin-only additions
 function addFaculty() {
   const name = prompt("Enter Faculty Name:");
   const dept = prompt("Enter Department:");
@@ -165,3 +319,5 @@ function addTournament() {
   }
 }
 </script>
+</body>
+</html>
