@@ -41,6 +41,7 @@ function login() {
   localStorage.setItem('role', role);
 
   toggleAdminButtons(role);
+  renderIssues();
 }
 
 function toggleAdminButtons(role) {
@@ -71,23 +72,50 @@ function addIssue() {
   if (!issueText) return alert('Please describe your issue!');
   const name = localStorage.getItem('name') || 'Anonymous';
   const role = localStorage.getItem('role') || 'Guest';
-  const issueObj = { name, role, text: issueText };
+  const issueObj = { name, role, text: issueText, resolved: false };
   issues.push(issueObj);
   localStorage.setItem('issues', JSON.stringify(issues));
   document.getElementById('issueText').value = '';
   renderIssues();
 }
+
 function renderIssues() {
+  const issueList = document.getElementById('issueList');
   if (!issues.length) {
-    document.getElementById('issueList').innerHTML = `<p>No issues submitted yet.</p>`;
+    issueList.innerHTML = `<p>No issues submitted yet.</p>`;
     return;
   }
-  document.getElementById('issueList').innerHTML = issues.map(i =>
-    `<div class="list-item">
-      <b>${i.name}</b> <small style="color:gray;">(${i.role})</small><br>
-      ${i.text}
-    </div>`
-  ).join('');
+  
+  issueList.innerHTML = issues.map((i, idx) => {
+    const resolvedClass = i.resolved ? "background:#e5e7eb; color:#6b7280; text-decoration:line-through;" : "";
+    const adminControls = currentRole === 'admin'
+      ? `<div style="margin-top:5px;">
+           <button onclick="resolveIssue(${idx})" style="background:#22c55e;color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;">✅ Resolve</button>
+           <button onclick="deleteIssue(${idx})" style="background:#ef4444;color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;">🗑 Delete</button>
+         </div>` 
+      : "";
+    
+    return `<div class="list-item" style="${resolvedClass}">
+              <b>${i.name}</b> <small style="color:gray;">(${i.role})</small><br>
+              ${i.text}
+              ${i.resolved ? "<br><small>[Resolved]</small>" : ""}
+              ${adminControls}
+            </div>`;
+  }).join('');
+}
+
+function resolveIssue(index) {
+  if (!confirm("Mark this issue as resolved?")) return;
+  issues[index].resolved = true;
+  localStorage.setItem('issues', JSON.stringify(issues));
+  renderIssues();
+}
+
+function deleteIssue(index) {
+  if (!confirm("Are you sure you want to delete this issue?")) return;
+  issues.splice(index, 1);
+  localStorage.setItem('issues', JSON.stringify(issues));
+  renderIssues();
 }
 
 // CGPA
