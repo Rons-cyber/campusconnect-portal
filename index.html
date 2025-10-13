@@ -4,21 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CampusConnect Portal</title>
-
 <style>
 :root {
-  /* 🎨 Purple Theme Palette */
-  --primary: #6A0DAD;               /* Deep Purple */
-  --secondary: #CBA6F7;             /* Light Lavender */
-  --accent: #B266FF;                /* Vibrant Violet */
-  --bg: #F3E8FF;                    /* Light Background */
-  --text-dark: #2E0249;             /* Deep Purple-Black */
-  --text-light: #F8F4FF;            /* Light Text */
+  --primary: #6A0DAD;
+  --secondary: #CBA6F7;
+  --accent: #B266FF;
+  --bg: #F3E8FF;
+  --text-dark: #2E0249;
+  --text-light: #F8F4FF;
   --gradient: linear-gradient(135deg, #6A0DAD, #B266FF);
-  --border: #E2CFF9;                /* Soft Border */
+  --border: #E2CFF9;
 }
-
-/* General */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
@@ -27,8 +23,6 @@ body {
   transition: margin-left 0.3s ease;
   padding-bottom: 70px;
 }
-
-/* Header */
 header {
   background: var(--gradient);
   color: var(--text-light);
@@ -41,8 +35,6 @@ header {
 }
 header h1 { margin: 0; font-size: 2.3rem; letter-spacing: 1px; }
 header p { margin-top: .5rem; font-size: 1rem; opacity: .9; }
-
-/* Menu Button */
 .menu-btn {
   position: absolute;
   top: 15px;
@@ -67,8 +59,6 @@ header p { margin-top: .5rem; font-size: 1rem; opacity: .9; }
   color: var(--text-light);
   transform: scale(1.05);
 }
-
-/* Sidebar */
 .sidebar {
   height: 100%;
   width: 0;
@@ -109,8 +99,6 @@ header p { margin-top: .5rem; font-size: 1rem; opacity: .9; }
   color: var(--primary);
   cursor: pointer;
 }
-
-/* Main */
 main { max-width: 950px; margin: auto; padding: 1rem; }
 .card {
   background: white;
@@ -146,7 +134,6 @@ button {
   transition: background 0.2s;
 }
 button:hover { background: var(--accent); }
-
 .hidden { display: none; }
 h2 {
   color: var(--primary);
@@ -157,8 +144,6 @@ h2 {
   border-bottom: 1px solid var(--border);
   padding: 8px 0;
 }
-
-/* Chat */
 .chat-box {
   border: 1.5px solid var(--border);
   border-radius: 10px;
@@ -169,8 +154,6 @@ h2 {
   margin-bottom: 8px;
 }
 .chat-message { margin-bottom: 6px; }
-
-/* Footer */
 footer {
   position: fixed;
   bottom: 0;
@@ -208,7 +191,6 @@ footer b { color: var(--primary); }
 </div>
 
 <main>
-  <!-- Login -->
   <section id="loginSection" class="card">
     <h2>Login / Register</h2>
     <input type="text" id="name" placeholder="Enter your name">
@@ -222,7 +204,6 @@ footer b { color: var(--primary); }
     <p id="welcomeMsg"></p>
   </section>
 
-  <!-- Chat Room -->
   <section id="chatSection" class="card hidden">
     <h2>Chat Room</h2>
     <div id="chatBox" class="chat-box"></div>
@@ -230,7 +211,6 @@ footer b { color: var(--primary); }
     <button onclick="sendMessage()">Send</button>
   </section>
 
-  <!-- Issues -->
   <section id="issueSection" class="card hidden">
     <h2>Report an Issue</h2>
     <textarea id="issueText" placeholder="Describe your issue..."></textarea>
@@ -239,7 +219,6 @@ footer b { color: var(--primary); }
     <div id="issueList"></div>
   </section>
 
-  <!-- CGPA Calculator -->
   <section id="cgpaSection" class="card hidden">
     <h2>CGPA Calculator</h2>
     <div id="subjects"></div>
@@ -248,21 +227,18 @@ footer b { color: var(--primary); }
     <p id="cgpaResult"></p>
   </section>
 
-  <!-- Faculty -->
   <section id="facultySection" class="card hidden">
     <h2>Faculty Directory</h2>
     <div id="facultyList"></div>
     <button id="addFacultyBtn" class="hidden" onclick="addFaculty()">+ Add Faculty</button>
   </section>
 
-  <!-- Alumni -->
   <section id="alumniSection" class="card hidden">
     <h2>Alumni Directory</h2>
     <div id="alumniList"></div>
     <button id="addAlumniBtn" class="hidden" onclick="addAlumni()">+ Add Alumni</button>
   </section>
 
-  <!-- Tournaments -->
   <section id="tournamentSection" class="card hidden">
     <h2>Tournaments</h2>
     <div id="tournamentList"></div>
@@ -277,8 +253,8 @@ footer b { color: var(--primary); }
 
 <script>
 let currentRole = '';
-let chatMessages = [];
-let issues = [];
+let chatMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+let issues = JSON.parse(localStorage.getItem('issues')) || [];
 
 function openMenu() { document.getElementById("sidebar").style.width = "240px"; }
 function closeMenu() { document.getElementById("sidebar").style.width = "0"; }
@@ -288,6 +264,24 @@ function showSection(id) {
   closeMenu();
 }
 
+// Restore session if exists
+window.onload = () => {
+  const savedName = localStorage.getItem('name');
+  const savedRole = localStorage.getItem('role');
+  if (savedName && savedRole) {
+    currentRole = savedRole;
+    document.getElementById('name').value = savedName;
+    document.getElementById('role').value = savedRole;
+    document.getElementById('welcomeMsg').innerText = `Welcome ${savedName}! You are logged in as ${savedRole}.`;
+    toggleAdminButtons(savedRole);
+  }
+  renderChat();
+  renderIssues();
+  document.getElementById("facultyList").innerHTML = localStorage.getItem("facultyList") || "";
+  document.getElementById("alumniList").innerHTML = localStorage.getItem("alumniList") || "";
+  document.getElementById("tournamentList").innerHTML = localStorage.getItem("tournamentList") || "";
+};
+
 // Login
 function login() {
   const name = document.getElementById('name').value.trim();
@@ -295,8 +289,14 @@ function login() {
   if (!name) return alert('Please enter your name');
   currentRole = role;
   document.getElementById('welcomeMsg').innerText = `Welcome ${name}! You are logged in as ${role}.`;
-  
-  // Show admin-only buttons
+
+  localStorage.setItem('name', name);
+  localStorage.setItem('role', role);
+
+  toggleAdminButtons(role);
+}
+
+function toggleAdminButtons(role) {
   ['addFacultyBtn','addAlumniBtn','addTournamentBtn'].forEach(id => {
     document.getElementById(id).classList.toggle('hidden', role !== 'admin');
   });
@@ -306,8 +306,9 @@ function login() {
 function sendMessage() {
   const msg = document.getElementById('chatInput').value.trim();
   if (!msg) return;
-  const name = document.getElementById('name').value || 'Guest';
+  const name = localStorage.getItem('name') || 'Guest';
   chatMessages.push({name, msg});
+  localStorage.setItem('chatMessages', JSON.stringify(chatMessages));
   document.getElementById('chatInput').value = '';
   renderChat();
 }
@@ -322,6 +323,7 @@ function addIssue() {
   const issue = document.getElementById('issueText').value.trim();
   if (!issue) return;
   issues.push(issue);
+  localStorage.setItem('issues', JSON.stringify(issues));
   document.getElementById('issueText').value = '';
   renderIssues();
 }
@@ -330,7 +332,6 @@ function renderIssues() {
 }
 
 // CGPA
-let subjects = [];
 function addSubject() {
   const div = document.createElement('div');
   div.innerHTML = `
@@ -348,24 +349,33 @@ function calculateCGPA() {
   document.getElementById('cgpaResult').innerText = `Your CGPA is ${cgpa}`;
 }
 
-// Admin-only additions
+// Admin-only additions (with storage)
 function addFaculty() {
   const name = prompt("Enter Faculty Name:");
   const dept = prompt("Enter Department:");
-  if (name && dept)
-    document.getElementById("facultyList").innerHTML += `<div class='list-item'><b>${name}</b> - ${dept}</div>`;
+  if (name && dept) {
+    const item = `<div class='list-item'><b>${name}</b> - ${dept}</div>`;
+    document.getElementById("facultyList").innerHTML += item;
+    localStorage.setItem("facultyList", document.getElementById("facultyList").innerHTML);
+  }
 }
 function addAlumni() {
   const name = prompt("Enter Alumni Name:");
   const year = prompt("Enter Graduation Year:");
-  if (name && year)
-    document.getElementById("alumniList").innerHTML += `<div class='list-item'><b>${name}</b> - Class of ${year}</div>`;
+  if (name && year) {
+    const item = `<div class='list-item'><b>${name}</b> - Class of ${year}</div>`;
+    document.getElementById("alumniList").innerHTML += item;
+    localStorage.setItem("alumniList", document.getElementById("alumniList").innerHTML);
+  }
 }
 function addTournament() {
   const name = prompt("Enter Tournament Name:");
   const date = prompt("Enter Tournament Date:");
-  if (name && date)
-    document.getElementById("tournamentList").innerHTML += `<div class='list-item'><b>${name}</b> - ${date}</div>`;
+  if (name && date) {
+    const item = `<div class='list-item'><b>${name}</b> - ${date}</div>`;
+    document.getElementById("tournamentList").innerHTML += item;
+    localStorage.setItem("tournamentList", document.getElementById("tournamentList").innerHTML);
+  }
 }
 </script>
 </body>
